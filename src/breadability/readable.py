@@ -424,7 +424,7 @@ class Article(object):
         self.fragment = fragment
 
     def __str__(self):
-        return tostring(self._readable)
+        return tostring(self._readable).decode('utf8')
 
     def __unicode__(self):
         return tounicode(self._readable)

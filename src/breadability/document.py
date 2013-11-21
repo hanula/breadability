@@ -50,7 +50,7 @@ def build_doc(page):
     if page is None:
         LOG.error("Page content is None, can't build_doc")
         return ''
-    if isinstance(page, unicode):
+    if isinstance(page, str):
         page_unicode = page
     else:
         enc = get_encoding(page)
@@ -60,7 +60,7 @@ def build_doc(page):
             page_unicode.encode('utf-8', 'replace'),
             parser=utf8_parser)
         return doc
-    except XMLSyntaxError, exc:
+    except XMLSyntaxError as exc:
         LOG.error('Failed to parse: ' + str(exc))
         raise ValueError('Failed to parse document contents.')
 
@@ -75,7 +75,7 @@ class OriginalDocument(object):
 
     def __str__(self):
         """Render out our document as a string"""
-        return tostring(self.html)
+        return tostring(self.html).decode('utf8')
 
     def __unicode__(self):
         """Render out our document as a string"""

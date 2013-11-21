@@ -20,12 +20,14 @@ USER_AGENT = 'breadability /{version} ({url})'.format(
     version=VERSION
 )
 
+from urllib.request import FancyURLopener
 
 # Setup a user agent on the requests out so that we make servers happy. We use
 # a custom agent string to help assist others in identifying the traffic.
-class AppURLopener(urllib.FancyURLopener):
+class AppURLopener(FancyURLopener):
     version = USER_AGENT
-urllib._urlopener = AppURLopener()
+
+#urllib._urlopener = AppURLopener()
 
 
 def parse_args():

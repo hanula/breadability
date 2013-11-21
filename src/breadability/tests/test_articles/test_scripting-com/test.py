@@ -42,7 +42,8 @@ class TestArticle(unittest.TestCase):
         doc = Article(self.article)
         # from lxml.etree import tounicode
         found = False
-        wanted_hash = '04e46055'
+        wanted_hash = '1f9378ed'
+
         # from breadability.logconfig import LNODE
         # from breadability.logconfig import set_logging_level
         # set_logging_level('DEBUG')

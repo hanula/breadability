@@ -52,6 +52,7 @@ class cached_property(object):
             if self.ttl > 0 and now - last_update > self.ttl:
                 raise AttributeError
         except (KeyError, AttributeError):
+
             value = self.fget(inst)
             try:
                 cache = inst._cache

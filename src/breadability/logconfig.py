@@ -61,7 +61,7 @@ def enable_pretty_logging():
             filename=options.log_file_prefix,
             maxBytes=options.log_file_max_size,
             backupCount=options.log_file_num_backups)
-        channel.setFormatter(_LogFormatter(color=False))
+        #channel.setFormatter(_LogFormatter(color=False))
         root_logger.addHandler(channel)
 
     if (options.log_to_stderr or
@@ -76,7 +76,7 @@ def enable_pretty_logging():
             except Exception:
                 pass
         channel = logging.StreamHandler()
-        channel.setFormatter(_LogFormatter(color=color))
+        #channel.setFormatter(_LogFormatter(color=color))
         root_logger.addHandler(channel)
 
 
@@ -117,11 +117,11 @@ class LogHelper(object):
 
         """
         if self._active:
-            content = tounicode(node)
+            content = tostr(node)
             hashed = md5()
             try:
                 hashed.update(content.encode('utf-8', errors="replace"))
-            except Exception, exc:
+            except Exception as exc:
                 LOG.error("Cannot hash the current node." + str(exc))
             hash_id = hashed.hexdigest()[0:8]
             # if hash_id in ['9c880b27', '8393b7d7', '69bfebdd']:
@@ -139,30 +139,26 @@ class _LogFormatter(logging.Formatter):
         if color:
             # The curses module has some str/bytes confusion in python3.
             # Most methods return bytes, but only accept strings.
-            # The explict calls to unicode() below are harmless in python2,
+            # The explict calls to str() below are harmless in python2,
             # but will do the right conversion in python3.
-            fg_color = unicode(curses.tigetstr("setaf") or
+            fg_color = str(curses.tigetstr("setaf") or
                                curses.tigetstr("setf") or "", "ascii")
             self._colors = {
-                logging.DEBUG: unicode(
-                    curses.tparm(fg_color, curses.COLOR_CYAN),
-                   "ascii"),
-                logging.INFO: unicode(
-                    curses.tparm(fg_color, curses.COLOR_GREEN),
-                    "ascii"),
-                logging.WARNING: unicode(
-                    curses.tparm(fg_color, curses.COLOR_YELLOW),  # Yellow
-                    "ascii"),
-                logging.ERROR: unicode(
-                    curses.tparm(fg_color, curses.COLOR_RED),  # Red
-                    "ascii"),
+                logging.DEBUG: str(
+                    curses.tparm(fg_color, curses.COLOR_CYAN)),
+                logging.INFO: str(
+                    curses.tparm(fg_color, curses.COLOR_GREEN)),
+                logging.WARNING: str(
+                    curses.tparm(fg_color, curses.COLOR_YELLOW)),
+                logging.ERROR: str(
+                    curses.tparm(fg_color, curses.COLOR_RED)),
             }
-            self._normal = unicode(curses.tigetstr("sgr0"), "ascii")
+            self._normal = str(curses.tigetstr("sgr0"), "ascii")
 
     def format(self, record):
         try:
             record.message = record.getMessage()
-        except Exception, e:
+        except Exception as e:
             record.message = "Bad message (%r): %r" % (e, record.__dict__)
         record.asctime = time.strftime(
             "%y%m%d %H:%M:%S", self.converter(record.created))

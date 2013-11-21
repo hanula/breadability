@@ -1,6 +1,9 @@
 import argparse
 import codecs
-import urllib2
+try:
+    import urllib2
+except ImportError:
+    import urllib.request as urllib2
 from os import mkdir
 from os import path
 
